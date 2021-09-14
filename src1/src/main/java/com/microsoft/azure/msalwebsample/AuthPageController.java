@@ -14,7 +14,9 @@ import java.util.concurrent.ExecutionException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
 import com.microsoft.aad.msal4j.*;
+import com.microsoft.azure.msalwebsample.models.AadUserResponse;
 import com.nimbusds.jwt.JWTParser;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -99,7 +101,13 @@ public class AuthPageController {
             setAccountInfo(mav, httpRequest);
 
             try {
-                mav.addObject("userInfo", getUserInfoFromGraph(result.accessToken()));
+
+                String aaDUserResponse = getUserInfoFromGraph(result.accessToken());
+                mav.addObject("rawUserInfo", aaDUserResponse);
+
+                Gson gson = new Gson();
+                AadUserResponse aadUserResponse = gson.fromJson(aaDUserResponse, AadUserResponse.class);
+                mav.addObject("userInfo", aadUserResponse.getResponseMsg());
 
                 return mav;
             } catch (Exception e) {

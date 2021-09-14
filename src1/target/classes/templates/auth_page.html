@@ -40,11 +40,15 @@
     <input type="submit" value="Show User Info" class="btn btn-info">
 </form>
 
-<span th:if="${ userInfo != null}">
-    <h3>Info of the current user:</h3>
+<div th:if="${ userInfo != null}">
+    <h3>Info of the current user</h3>
 
-    <div th:utext="${userInfo}"> </div>
-</span>
+    <div th:text="${userInfo.getDisplayName()}"></div>
+    <div th:text="${userInfo.getJobTitle()}"></div>
+
+    <h4 style="padding-top: 50px;">Raw JSON</h4>
+    <div th:text="${rawUserInfo}"></div>
+</div>
 
 
 </body>
